@@ -2,31 +2,25 @@ package es.deusto.sd.strava.dto;
 
 import java.util.Date;
 
-public class SesionDTO {
+import es.deusto.sd.strava.entity.Deportes;
 
-	private static final long serialVersionUID = 1L;
+public class SesionDTO {
 	private String titulo;
-	private int distancia;
-	private Date fecha_ini;
-	private String deporte;
-	private int duracion;
+	private float distancia;
+	private Date fechaInicio;
+	private Date horaInicio;
+	private float duracion;
+	private Deportes deporte;
 	
-	public SesionDTO(String titulo, int distancia, Date fecha_ini, String deporte, int duracion) {
+	public SesionDTO(String titulo, float distancia, Date fechaInicio, Date horaInicio, float duracion,
+			Deportes deporte) {
 		super();
 		this.titulo = titulo;
 		this.distancia = distancia;
-		this.fecha_ini = fecha_ini;
-		this.deporte = deporte;
+		this.fechaInicio = fechaInicio;
+		this.horaInicio = horaInicio;
 		this.duracion = duracion;
-	}
-	
-	public SesionDTO() {
-		super();
-		this.titulo = "";
-		this.distancia = 0;
-		this.fecha_ini = null;
-		this.deporte = "";
-		this.duracion = 0;
+		this.deporte = deporte;
 	}
 
 	public String getTitulo() {
@@ -37,45 +31,51 @@ public class SesionDTO {
 		this.titulo = titulo;
 	}
 
-	public int getDistancia() {
+	public float getDistancia() {
 		return distancia;
 	}
 
-	public void setDistancia(int distancia) {
+	public void setDistancia(float distancia) {
 		this.distancia = distancia;
 	}
 
-	public Date getFecha_ini() {
-		return fecha_ini;
+	public Date getFechaInicio() {
+		return fechaInicio;
 	}
 
-	public void setFecha_ini(Date fecha_ini) {
-		this.fecha_ini = fecha_ini;
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
-	public String getDeporte() {
-		return deporte;
+	public Date getHoraInicio() {
+		return horaInicio;
 	}
 
-	public void setDeporte(String deporte) {
-		this.deporte = deporte;
+	public void setHoraInicio(Date horaInicio) {
+		this.horaInicio = horaInicio;
 	}
 
-	public int getDuracion() {
+	public float getDuracion() {
 		return duracion;
 	}
 
-	public void setDuracion(int duracion) {
+	public void setDuracion(float duracion) {
 		this.duracion = duracion;
+	}
+
+	public Deportes getDeporte() {
+		return deporte;
+	}
+
+	public void setDeporte(Deportes deporte) {
+		this.deporte = deporte;
 	}
 
 	@Override
 	public String toString() {
-		return "SesionDTO [titulo=" + titulo + ", distancia=" + distancia + ", fecha_ini=" + fecha_ini + ", deporte="
-				+ deporte + ", duracion=" + duracion + "]";
+		return "SesionDTO [titulo=" + titulo + ", distancia=" + distancia + ", fechaInicio=" + fechaInicio
+				+ ", horaInicio=" + horaInicio + ", duracion=" + duracion + ", deporte=" + deporte + "]";
 	}
-
-	
 	
 	
 	

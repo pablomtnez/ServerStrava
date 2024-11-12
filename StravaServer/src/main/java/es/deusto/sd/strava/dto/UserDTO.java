@@ -1,36 +1,41 @@
 package es.deusto.sd.strava.dto;
 
+import java.util.Date;
+
 public class UserDTO {
-	private static final long serialVersionUID = 1L;
-	private String username;
+	
+	private int tipo;
 	private String email;
-	private String bornDate;
-	private int peso;
-	private int altura;
-	public UserDTO(String username, String email, String bornDate, int peso, int altura) {
+	private String nombre;
+    private Date fechaNacimiento;
+    private float peso;
+	private float altura;
+	private float frecuenciaCardiacaMaxima;
+	private float frecuenciaCardiacaReposo;
+	
+	public UserDTO(int tipo, String email, String nombre, Date fechaNacimiento, float peso, float altura,
+			float frecuenciaCardiacaMaxima, float frecuenciaCardiacaReposo) {
 		super();
-		this.username = username;
+		this.tipo = tipo;
 		this.email = email;
-		this.bornDate = bornDate;
+		this.nombre = nombre;
+		this.fechaNacimiento = fechaNacimiento;
 		this.peso = peso;
 		this.altura = altura;
+		this.frecuenciaCardiacaMaxima = frecuenciaCardiacaMaxima;
+		this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
 	}
-	
+
 	public UserDTO() {
 		super();
-		this.username = "";
-		this.email = "";
-		this.bornDate = "";
-		this.peso = 0;
-		this.altura = 0;
 	}
 
-	public String getUsername() {
-		return username;
+	public int getTipo() {
+		return tipo;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
 	}
 
 	public String getEmail() {
@@ -41,37 +46,60 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	public String getBornDate() {
-		return bornDate;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setBornDate(String bornDate) {
-		this.bornDate = bornDate;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
-	public int getPeso() {
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public float getPeso() {
 		return peso;
 	}
 
-	public void setPeso(int peso) {
+	public void setPeso(float peso) {
 		this.peso = peso;
 	}
 
-	public int getAltura() {
+	public float getAltura() {
 		return altura;
 	}
 
-	public void setAltura(int altura) {
+	public void setAltura(float altura) {
 		this.altura = altura;
+	}
+
+	public float getFrecuenciaCardiacaMaxima() {
+		return frecuenciaCardiacaMaxima;
+	}
+
+	public void setFrecuenciaCardiacaMaxima(float frecuenciaCardiacaMaxima) {
+		this.frecuenciaCardiacaMaxima = frecuenciaCardiacaMaxima;
+	}
+
+	public float getFrecuenciaCardiacaReposo() {
+		return frecuenciaCardiacaReposo;
+	}
+
+	public void setFrecuenciaCardiacaReposo(float frecuenciaCardiacaReposo) {
+		this.frecuenciaCardiacaReposo = frecuenciaCardiacaReposo;
 	}
 
 	@Override
 	public String toString() {
-		return "UserDTO [username=" + username + ", email=" + email + ", bornDate=" + bornDate + ", peso=" + peso
-				+ ", altura=" + altura + "]";
+		return "UserDTO [tipo=" + tipo + ", email=" + email + ", nombre=" + nombre + ", fechaNacimiento="
+				+ fechaNacimiento + ", peso=" + peso + ", altura=" + altura + ", frecuenciaCardiacaMaxima="
+				+ frecuenciaCardiacaMaxima + ", frecuenciaCardiacaReposo=" + frecuenciaCardiacaReposo + "]";
 	}
-
-	
 	
 	
 }

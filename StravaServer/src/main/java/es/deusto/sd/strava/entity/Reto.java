@@ -4,18 +4,16 @@ import java.util.Date;
 
 public class Reto {
 	
-	private int idReto;
 	private String nombre;
 	private Date fechaInicio;
 	private Date fechaFin;
 	private float distancia;
 	private float tiempo;
-	private Sport deporte;
+	private Deportes deporte;
 	
-	public Reto(int idReto, String nombre, Date fechaInicio, Date fechaFin, float distancia, float tiempo,
-			Sport deporte) {
+	public Reto(String nombre, Date fechaInicio, Date fechaFin, float distancia, float tiempo,
+			Deportes deporte) {
 		super();
-		this.idReto = idReto;
 		this.nombre = nombre;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
@@ -26,14 +24,6 @@ public class Reto {
 
 	public Reto() {
 		super();
-	}
-
-	public int getIdReto() {
-		return idReto;
-	}
-
-	public void setIdReto(int idReto) {
-		this.idReto = idReto;
 	}
 
 	public String getNombre() {
@@ -76,17 +66,17 @@ public class Reto {
 		this.tiempo = tiempo;
 	}
 
-	public Sport getDeporte() {
+	public Deportes getDeporte() {
 		return deporte;
 	}
 
-	public void setDeporte(Sport deporte) {
+	public void setDeporte(Deportes deporte) {
 		this.deporte = deporte;
 	}
 
 	@Override
 	public String toString() {
-		return "Reto [idReto=" + idReto + ", nombre=" + nombre + ", fechaInicio=" + fechaInicio + ", fechaFin="
-				+ fechaFin + ", distancia=" + distancia + ", tiempo=" + tiempo + ", deporte=" + deporte + "]";
+		return "Reto [nombre=" + nombre + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", distancia="
+				+ distancia + ", tiempo=" + tiempo + ", deporte=" + deporte + "]";
 	}
 }

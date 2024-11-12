@@ -2,41 +2,29 @@ package es.deusto.sd.strava.dto;
 
 import java.util.Date;
 
+import es.deusto.sd.strava.entity.Deportes;
+
 public class RetoDTO {
 	
-	private static final long serialVersionUD = 1L;
-	private int idReto;
 	private String nombre;
-	private String deporte;
-	private Date fecha_ini;
-	private Date fecha_fin;
-	private int distancia;
-	public RetoDTO(int idReto, String nombre, String deporte, Date fecha_ini, Date fecha_fin, int distancia) {
-		super();
-		this.idReto = idReto;
-		this.nombre = nombre;
-		this.deporte = deporte;
-		this.fecha_ini = fecha_ini;
-		this.fecha_fin = fecha_fin;
-		this.distancia = distancia;
-	}
+	private Date fechaInicio;
+	private Date fechaFin;
+	private float distancia;
+	private float tiempo;
+	private Deportes deporte;
 	
+	public RetoDTO(String nombre, Date fechaInicio, Date fechaFin, float distancia, float tiempo, Deportes deporte) {
+		super();
+		this.nombre = nombre;
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
+		this.distancia = distancia;
+		this.tiempo = tiempo;
+		this.deporte = deporte;
+	}
+
 	public RetoDTO() {
 		super();
-		this.idReto = 0;
-		this.nombre = "";
-		this.deporte = "";
-		this.fecha_ini = null;
-		this.fecha_fin = null;
-		this.distancia = 0;
-	}
-
-	public int getIdReto() {
-		return idReto;
-	}
-
-	public void setIdReto(int idReto) {
-		this.idReto = idReto;
 	}
 
 	public String getNombre() {
@@ -47,45 +35,54 @@ public class RetoDTO {
 		this.nombre = nombre;
 	}
 
-	public String getDeporte() {
-		return deporte;
+	public Date getFechaInicio() {
+		return fechaInicio;
 	}
 
-	public void setDeporte(String deporte) {
-		this.deporte = deporte;
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
-	public Date getFecha_ini() {
-		return fecha_ini;
+	public Date getFechaFin() {
+		return fechaFin;
 	}
 
-	public void setFecha_ini(Date fecha_ini) {
-		this.fecha_ini = fecha_ini;
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
 	}
 
-	public Date getFecha_fin() {
-		return fecha_fin;
-	}
-
-	public void setFecha_fin(Date fecha_fin) {
-		this.fecha_fin = fecha_fin;
-	}
-
-	public int getDistancia() {
+	public float getDistancia() {
 		return distancia;
 	}
 
-	public void setDistancia(int distancia) {
+	public void setDistancia(float distancia) {
 		this.distancia = distancia;
 	}
 
-	
+	public float getTiempo() {
+		return tiempo;
+	}
+
+	public void setTiempo(float tiempo) {
+		this.tiempo = tiempo;
+	}
+
+	public Deportes getDeporte() {
+		return deporte;
+	}
+
+	public void setDeporte(Deportes deporte) {
+		this.deporte = deporte;
+	}
 
 	@Override
 	public String toString() {
-		return "RetoDTO [idReto=" + idReto + ", nombre=" + nombre + ", deporte=" + deporte + ", fecha_ini=" + fecha_ini
-				+ ", fecha_fin=" + fecha_fin + ", distancia=" + distancia + "]";
+		return "RetoDTO [nombre=" + nombre + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", distancia="
+				+ distancia + ", tiempo=" + tiempo + ", deporte=" + deporte + "]";
 	}
+	
+	
+	
 	
 	
 }
