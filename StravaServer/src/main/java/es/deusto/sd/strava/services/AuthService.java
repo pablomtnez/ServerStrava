@@ -20,10 +20,9 @@ public class AuthService {
     private static Map<String, User> userRepository = new HashMap<>();
     private static Map<String, User> tokenStore = new HashMap<>();
 
-    // Login method that checks if the user exists and matches the provided TipoUsuario (GOOGLE or FACEBOOK)
     public Optional<String> login(String email, TipoUsuario tipoUsuario) {
         User user = userRepository.get(email);
-        
+
         if (user != null && user.getTipoUsuario() == tipoUsuario) {
             String token = generateToken();
             tokenStore.put(token, user);
@@ -33,7 +32,6 @@ public class AuthService {
         }
     }
 
-    // Logout method to remove the token from the session store
     public Optional<Boolean> logout(String token) {
         if (tokenStore.containsKey(token)) {
             tokenStore.remove(token);
@@ -43,25 +41,31 @@ public class AuthService {
         }
     }
 
-    // Method to add a new user to the repository
-    public void addUser(User user) {
-        if (user != null) {
-            userRepository.putIfAbsent(user.getEmail(), user);
+    public void register(User user) {
+        if (user == null || user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("User and email must not be null or empty");
         }
+
+        if (userRepository.containsKey(user.getEmail())) {
+            throw new RuntimeException("User with email " + user.getEmail() + " already exists");
+        }
+
+        userRepository.put(user.getEmail(), user);
     }
 
-    // Method to get the user based on the token
     public User getUserByToken(String token) {
-        return tokenStore.get(token); 
+        return tokenStore.get(token);
     }
 
-    // Method to get the user based on the email
     public User getUserByEmail(String email) {
         return userRepository.get(email);
     }
 
-    // Synchronized method to guarantee unique token generation
     private static synchronized String generateToken() {
-        return Long.toHexString(System.currentTimeMillis());
+        return Long.toHexString(System.currentTimeMillis()) + "-" + Math.random();
+    }
+
+    public boolean isTokenValid(String token) {
+        return tokenStore.containsKey(token);
     }
 }
