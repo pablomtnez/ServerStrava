@@ -1,31 +1,46 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.5'
-	id 'io.spring.dependency-management' version '1.1.6'
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.example'
+group = 'es.deusto.sd.strava'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web-services'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Spring Boot Starter Web para aplicaciones web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Boot Starter Data JPA para interacción con bases de datos
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Boot Starter Web Services para APIs SOAP
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+
+    // SpringDoc OpenAPI para anotaciones Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+    // Base de datos H2 para pruebas en tiempo de ejecución
+    runtimeOnly 'com.h2database:h2'
+
+    // Herramientas de desarrollo (recarga automática, etc.)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Dependencias para pruebas
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
