@@ -11,8 +11,16 @@ public class UsuarioReto {
         this.reto = reto;
         this.completado = false;
     }
+    
+    
 
-    public User getUsuario() {
+    public UsuarioReto() {
+		super();
+	}
+
+
+
+	public User getUsuario() {
         return usuario;
     }
 
