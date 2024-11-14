@@ -8,6 +8,8 @@ package es.deusto.sd.strava.facade;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Authorization Controller", description = "User registration, login, and logout operations")
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
@@ -50,10 +53,13 @@ public class AuthController {
             User user = UserAssembler.toEntity(userDTO);
             authService.register(user);
             UserDTO responseDTO = UserAssembler.toDTO(user);
+            logger.info("User registered successfully: {}", user.getEmail());
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
+            logger.error("Registration failed: Invalid input.", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
+            logger.error("Registration failed: Email already exists.", e);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -77,13 +83,16 @@ public class AuthController {
                 User loggedInUser = authService.getUserByEmail(user.getEmail());
                 UserDTO responseDTO = UserAssembler.toDTO(loggedInUser);
 
+                logger.info("Login successful for user: {}", user.getEmail());
                 return ResponseEntity.ok()
                     .header("Authorization", "Bearer " + token.get())
                     .body(responseDTO);
             } else {
+                logger.warn("Login failed for user: {}. Invalid credentials.", user.getEmail());
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
         } catch (IllegalArgumentException e) {
+            logger.error("Login failed: Invalid input.", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -99,10 +108,17 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@Parameter(name = "token", description = "Authorization token", required = true)
                                         @RequestBody String token) {
+        if (token == null || token.isEmpty()) {
+            logger.warn("Logout failed: Token is null or empty.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Optional<Boolean> result = authService.logout(token);
         if (result.isPresent() && result.get()) {
+            logger.info("Logout successful for token: {}", token);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
+            logger.warn("Logout failed: Invalid token: {}", token);
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
