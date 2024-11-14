@@ -22,14 +22,12 @@ import es.deusto.sd.strava.entity.User;
 @Service
 public class StravaService {
 
-    // Simulando repositorios en memoria para sesiones, retos y usuarios-retos
     private static List<Sesion> sesiones = new ArrayList<>();
     private static List<Reto> retos = new ArrayList<>();
     private static List<UsuarioReto> usuariosRetos = new ArrayList<>();
 
     // --- Sesiones ---
 
-    // Crear una sesión de entrenamiento manualmente
     public void crearSesion(String titulo, float distancia, Date fechaInicio, Date horaInicio, float duracion, Deportes deporte) {
         if (titulo == null || titulo.isEmpty() || distancia <= 0 || fechaInicio == null || horaInicio == null || duracion <= 0 || deporte == null) {
             throw new IllegalArgumentException("Todos los campos son obligatorios y deben tener valores válidos.");
@@ -39,7 +37,6 @@ public class StravaService {
         sesiones.add(sesion);
     }
 
-    // Consultar las últimas 5 sesiones de entrenamiento realizadas
     public List<Sesion> consultarUltimasSesiones() {
         return sesiones.stream()
                 .sorted((s1, s2) -> s2.getFechaInicio().compareTo(s1.getFechaInicio()))
@@ -47,7 +44,6 @@ public class StravaService {
                 .collect(Collectors.toList());
     }
 
-    // Consultar todas las sesiones de entrenamiento realizadas entre dos fechas
     public List<Sesion> consultarSesionesPorFechas(Date fechaInicio, Date fechaFin) {
         if (fechaInicio == null || fechaFin == null || fechaInicio.after(fechaFin)) {
             throw new IllegalArgumentException("Las fechas deben ser válidas y fechaInicio no puede ser posterior a fechaFin.");
@@ -60,7 +56,6 @@ public class StravaService {
 
     // --- Retos ---
 
-    // Crear un nuevo reto
     public void crearReto(String nombre, Date fechaInicio, Date fechaFin, float distancia, float tiempo, Deportes deporte) {
         if (nombre == null || nombre.isEmpty() || fechaInicio == null || fechaFin == null || fechaInicio.after(fechaFin) || (distancia <= 0 && tiempo <= 0) || deporte == null) {
             throw new IllegalArgumentException("Todos los campos son obligatorios y deben tener valores válidos.");
@@ -70,7 +65,6 @@ public class StravaService {
         retos.add(reto);
     }
 
-    // Consultar los retos activos (aquellos que no han finalizado)
     public List<Reto> consultarRetosActivos() {
         Date hoy = new Date();
         return retos.stream()
@@ -80,7 +74,6 @@ public class StravaService {
                 .collect(Collectors.toList());
     }
 
-    // Consultar retos filtrados por fecha y deporte
     public List<Reto> consultarRetosPorFiltro(Date fechaInicio, Date fechaFin, Deportes deporte) {
         return retos.stream()
                 .filter(r -> (fechaInicio == null || !r.getFechaInicio().before(fechaInicio)) &&
@@ -89,7 +82,6 @@ public class StravaService {
                 .collect(Collectors.toList());
     }
 
-    // Aceptar un reto
     public void aceptarReto(String nombreReto, User usuario) {
         Reto reto = retos.stream()
                 .filter(r -> r.getNombre().equals(nombreReto))
@@ -98,19 +90,14 @@ public class StravaService {
 
         UsuarioReto usuarioReto = new UsuarioReto(usuario, reto);
         usuariosRetos.add(usuarioReto);
-
-        System.out.println("El usuario " + usuario.getNombre() + " ha aceptado el reto: " + reto.getNombre());
     }
 
-    // Consultar los retos aceptados por un usuario
-    public List<Reto> consultarRetosAceptados(User usuario) {
+    public List<UsuarioReto> consultarRetosAceptados(User usuario) {
         return usuariosRetos.stream()
                 .filter(ur -> ur.getUsuario().equals(usuario))
-                .map(UsuarioReto::getReto)
                 .collect(Collectors.toList());
     }
 
-    // Consultar el progreso de un reto aceptado
     public float consultarProgresoReto(String nombreReto, List<Sesion> sesionesUsuario) {
         Reto reto = retos.stream()
                 .filter(r -> r.getNombre().equals(nombreReto))
