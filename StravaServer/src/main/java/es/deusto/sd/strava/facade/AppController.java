@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -88,24 +90,27 @@ public class AppController {
     }
 
     @Operation(
-        summary = "Get training sessions by date range",
-        description = "Retrieves all training sessions within a specified date range.",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "OK: Sessions retrieved successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad Request: Invalid date range")
-        }
-    )
-    @GetMapping("/sessions")
-    public ResponseEntity<List<SesionDTO>> getSessionsByDateRange(@RequestParam Date startDate, @RequestParam Date endDate) {
-        try {
-            List<SesionDTO> sessions = stravaService.consultarSesionesPorFechas(startDate, endDate).stream()
-                    .map(SesionAssembler::toDTO)
-                    .toList();
-            return ResponseEntity.ok(sessions);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-    }
+    	    summary = "Get training sessions by date range",
+    	    description = "Retrieves all training sessions within a specified date range.",
+    	    responses = {
+    	        @ApiResponse(responseCode = "200", description = "OK: Sessions retrieved successfully"),
+    	        @ApiResponse(responseCode = "400", description = "Bad Request: Invalid date range")
+    	    }
+    	)
+    	@GetMapping("/sessions")
+    	public ResponseEntity<List<SesionDTO>> getSessionsByDateRange(
+    	        @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+    	        @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
+    	    try {
+    	        List<SesionDTO> sessions = stravaService.consultarSesionesPorFechas(startDate, endDate).stream()
+    	                .map(SesionAssembler::toDTO)
+    	                .toList();
+    	        return ResponseEntity.ok(sessions);
+    	    } catch (IllegalArgumentException e) {
+    	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    	    }
+    	}
+
 
     @Operation(
         summary = "Create a new challenge",
@@ -166,7 +171,9 @@ public class AppController {
         }
     )
     @PostMapping("/challenges/accept")
-    public ResponseEntity<String> acceptChallenge(@RequestParam String challengeName, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> acceptChallenge(
+            @RequestParam(name = "challengeName") String challengeName, 
+            @RequestBody UserDTO userDTO) {
         try {
             stravaService.aceptarReto(challengeName, UserAssembler.toEntity(userDTO));
             return ResponseEntity.ok("Challenge accepted successfully.");
@@ -174,6 +181,7 @@ public class AppController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
 
     @Operation(
         summary = "Get accepted challenges",
@@ -200,23 +208,26 @@ public class AppController {
     }
 
     @Operation(
-        summary = "Get challenge progress",
-        description = "Retrieves the progress of a user on a specific challenge.",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "OK: Progress retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Not Found: Challenge not found")
-        }
-    )
-    @GetMapping("/challenges/progress")
-    public ResponseEntity<Float> getChallengeProgress(@RequestParam String challengeName, @RequestBody List<SesionDTO> userSessions) {
-        try {
-            List<Sesion> sessions = userSessions.stream()
-                    .map(SesionAssembler::toEntity)
-                    .toList();
-            float progress = stravaService.consultarProgresoReto(challengeName, sessions);
-            return ResponseEntity.ok(progress);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+    	    summary = "Get challenge progress",
+    	    description = "Retrieves the progress of a user on a specific challenge.",
+    	    responses = {
+    	        @ApiResponse(responseCode = "200", description = "OK: Progress retrieved successfully"),
+    	        @ApiResponse(responseCode = "404", description = "Not Found: Challenge not found")
+    	    }
+    	)
+    	@GetMapping("/challenges/progress")
+    	public ResponseEntity<Float> getChallengeProgress(
+    	    @RequestParam(name = "challengeName", required = true) String challengeName,
+    	    @RequestBody List<SesionDTO> userSessions) {
+    	    try {
+    	        List<Sesion> sessions = userSessions.stream()
+    	                .map(SesionAssembler::toEntity)
+    	                .toList();
+    	        float progress = stravaService.consultarProgresoReto(challengeName, sessions);
+    	        return ResponseEntity.ok(progress);
+    	    } catch (RuntimeException e) {
+    	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    	    }
+    	}
+
 }

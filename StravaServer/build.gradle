@@ -44,3 +44,8 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// Configuración para habilitar la inclusión de metadatos de nombres de parámetros
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'
+}
