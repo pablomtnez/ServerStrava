@@ -1,9 +1,3 @@
-/**
- * This code is based on solutions provided by ChatGPT 4o and 
- * adapted using GitHub Copilot. It has been thoroughly reviewed 
- * and validated to ensure correctness and that it is free of errors.
- */
-
 package es.deusto.sd.strava.services;
 
 import java.util.ArrayList;
@@ -26,16 +20,36 @@ public class StravaService {
     private static List<Reto> retos = new ArrayList<>();
     private static List<UsuarioReto> usuariosRetos = new ArrayList<>();
 
+    
+
     // --- Sesiones ---
 
     public void crearSesion(String titulo, float distancia, Date fechaInicio, Date horaInicio, float duracion, Deportes deporte) {
-        if (titulo == null || titulo.isEmpty() || distancia <= 0 || fechaInicio == null || horaInicio == null || duracion <= 0 || deporte == null) {
-            throw new IllegalArgumentException("Todos los campos son obligatorios y deben tener valores válidos.");
+        // Validar los parámetros de entrada
+        if (titulo == null || titulo.isEmpty()) {
+            throw new IllegalArgumentException("El título de la sesión no puede estar vacío.");
+        }
+        if (distancia <= 0) {
+            throw new IllegalArgumentException("La distancia debe ser mayor a 0.");
+        }
+        if (fechaInicio == null) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser nula.");
+        }
+        if (horaInicio == null) {
+            throw new IllegalArgumentException("La hora de inicio no puede ser nula.");
+        }
+        if (duracion <= 0) {
+            throw new IllegalArgumentException("La duración debe ser mayor a 0.");
+        }
+        if (deporte == null) {
+            throw new IllegalArgumentException("El deporte no puede ser nulo.");
         }
 
+        // Crear la sesión y agregarla a la lista de sesiones
         Sesion sesion = new Sesion(titulo, distancia, fechaInicio, horaInicio, duracion, deporte);
         sesiones.add(sesion);
     }
+
 
     public List<Sesion> consultarUltimasSesiones() {
         return sesiones.stream()

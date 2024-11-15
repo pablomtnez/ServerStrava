@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -44,19 +45,27 @@ public class AppController {
     public ResponseEntity<String> createSession(@Parameter(description = "Training session data", required = true)
                                                 @RequestBody SesionDTO sesionDTO) {
         try {
+            // Convertir el string de horaInicio a un objeto Date utilizando el método parseTime
+            Date horaInicio = SesionAssembler.parseTime(sesionDTO.getHoraInicio());
+
+            // Llamar al servicio con los parámetros correctamente convertidos
             stravaService.crearSesion(
                 sesionDTO.getTitulo(),
                 sesionDTO.getDistancia(),
                 sesionDTO.getFechaInicio(),
-                sesionDTO.getHoraInicio(),
+                horaInicio, // Usamos la hora convertida
                 sesionDTO.getDuracion(),
                 sesionDTO.getDeporte()
             );
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Session created successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (IllegalArgumentException | ParseException e) {
+            // Manejar excepciones y devolver un mensaje de error adecuado
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
+
+
 
     @Operation(
         summary = "Get the latest training sessions",
@@ -134,14 +143,18 @@ public class AppController {
     )
     @GetMapping("/challenges/active")
     public ResponseEntity<List<RetoDTO>> getActiveChallenges() {
-        List<RetoDTO> challenges = stravaService.consultarRetosActivos().stream()
-                .map(RetoAssembler::toDTO)
-                .toList();
+        try {
+            List<RetoDTO> challenges = stravaService.consultarRetosActivos().stream()
+                    .map(RetoAssembler::toDTO)
+                    .toList();
 
-        if (challenges.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            if (challenges.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(challenges);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        return ResponseEntity.ok(challenges);
     }
 
     @Operation(
@@ -172,14 +185,18 @@ public class AppController {
     )
     @GetMapping("/challenges/accepted")
     public ResponseEntity<List<UsuarioRetoDTO>> getAcceptedChallenges(@RequestBody UserDTO userDTO) {
-        List<UsuarioRetoDTO> acceptedChallenges = stravaService.consultarRetosAceptados(UserAssembler.toEntity(userDTO)).stream()
-                .map(UsuarioRetoAssembler::toDTO)
-                .toList();
+        try {
+            List<UsuarioRetoDTO> acceptedChallenges = stravaService.consultarRetosAceptados(UserAssembler.toEntity(userDTO)).stream()
+                    .map(UsuarioRetoAssembler::toDTO)
+                    .toList();
 
-        if (acceptedChallenges.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            if (acceptedChallenges.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(acceptedChallenges);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        return ResponseEntity.ok(acceptedChallenges);
     }
 
     @Operation(

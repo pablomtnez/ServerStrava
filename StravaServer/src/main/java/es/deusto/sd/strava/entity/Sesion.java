@@ -7,7 +7,7 @@ public class Sesion {
 	private String titulo;
 	private float distancia;
 	private Date fechaInicio;
-	private Date horaInicio;
+	private Date horaInicio; // Mantenemos Date para la lógica interna
 	private float duracion;
 	private Deportes deporte;
 	
